@@ -7,7 +7,7 @@ var port = process.env.PORT || 8080;
 
 
 app.get('/scrape', function(req, res){
-  url = 'http://www.imdb.com/title/tt1229340/'
+  url = 'http://www.imdb.com/title/tt1495708/'
   request(url, function(error, response, html){
       if(!error){
         var $ = cheerio.load(html);
@@ -17,6 +17,10 @@ app.get('/scrape', function(req, res){
           var data = $(this);
           title = data.children().first().text();
           json.title = title;
+        });
+        $(".header .nobr").filter(function(){
+          var data = $(this);
+          release = data.text();
           json.release = release;
         })
         $('.star-box-giga-star').filter(function(){
@@ -25,7 +29,11 @@ app.get('/scrape', function(req, res){
           json.rating = rating;
         })
       }
-      
+      fs.writeFile('output.json', JSON.stringify(json, null, 4),
+      function(err){
+          console.log('File successfully written! - Check the directory for output.json')
+      });
+      res.send('message in console');
   });
 });
 
