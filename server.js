@@ -12,7 +12,7 @@ app.get('/scrape', function(req, res){
 
   url = 'http://www.imdb.com/title/tt1495708/'
   request(url, function(error, response, html){
-      if(!error){
+      if(!error && response.statusCode == 200){
         var $ = cheerio.load(html);
 
         //CREATE VARIABLES YOU WOULD LIKE TO SCRAPE
